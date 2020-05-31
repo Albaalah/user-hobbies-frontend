@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {Fragment, useEffect} from "react";
 import {Button} from "@material-ui/core";
 import {useDispatch, useSelector} from 'react-redux';
 import {getUsers, addUser} from "../../reducers/users.reducer";
@@ -36,6 +36,30 @@ const Users = () => {
         setConfirmationDialog(true)
     };
 
+    const renderUserDialogs = () => {
+        return <Fragment>
+            <CustomDialog isOpen={addUserDialog} saveBtnText={'Save'}
+                          onClose={()=> setAddUserDialog(false)}
+                          title={'Add User'} onConfirm={onConfirm}
+            >
+                <div className="row">
+                    <div className={'col-md-12 mt-4'}>
+                        <label htmlFor={'name'}>Name:</label>
+                        <input value={name} name='name' id='name' className="form-control form-control-sm"
+                               placeholder='Enter name' type="text" onChange={({target:{value = ''}}) => setName(value)}/>
+                    </div>
+                </div>
+            </CustomDialog>
+            <CustomDialog isOpen={confirmationDialog} saveBtnText={'Confirm'} onClose={()=> setConfirmationDialog(false)} title={'Confirm action'} onConfirm={onAddUser}>
+                <div className="row">
+                    <div className={'col-md-12 mt-4'}>
+                        <label>Add this user?</label>
+                    </div>
+                </div>
+            </CustomDialog>
+        </Fragment>
+    }
+
     return <div className={"resize user-container"}>
         <div className='d-flex justify-content-between m-2'>
             <h2>Users</h2>
@@ -51,26 +75,7 @@ const Users = () => {
                 <hr/>
             </div>
         })}
-
-        <CustomDialog isOpen={addUserDialog} saveBtnText={'Save'}
-                      onClose={()=> setAddUserDialog(false)}
-                      title={'Add User'} onConfirm={onConfirm}
-        >
-            <div className="row">
-                <div className={'col-md-12 mt-4'}>
-                    <label htmlFor={'name'}>Name:</label>
-                    <input value={name} name='name' id='name' className="form-control form-control-sm"
-                           placeholder='Enter name' type="text" onChange={({target:{value = ''}}) => setName(value)}/>
-                </div>
-            </div>
-        </CustomDialog>
-        <CustomDialog isOpen={confirmationDialog} saveBtnText={'Confirm'} onClose={()=> setConfirmationDialog(false)} title={'Confirm action'} onConfirm={onAddUser}>
-            <div className="row">
-                <div className={'col-md-12 mt-4'}>
-                    <label>Add this user?</label>
-                </div>
-            </div>
-        </CustomDialog>
+        {renderUserDialogs()}
     </div>
 };
 

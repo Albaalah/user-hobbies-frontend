@@ -12,22 +12,56 @@ import {
 } from "@material-ui/core";
 import {useSelector} from "react-redux";
 import {isEmpty} from 'lodash';
+import CustomDialog from "../Common/CustomDialog";
 
 const Hobbies = () => {
     const hobbiesDetail = useSelector(state => state.hobbies.hobbiesDetail);
     const loading = useSelector(state => state.users.loading);
     const [hobbyInfo, setHobbyInfo] = React.useState([]);
+    const [deleteHobbyDialog, setDeleteHobbyDialog] = React.useState(false);
+    const [selectedHobbyId, setSelectedHobbyId] = React.useState(false);
 
     if (loading) {
         return <CircularProgress/>
     }
 
-    const onDelete = (id) => {
+    const onConfirmDelete = () => {
+        setDeleteHobbyDialog(false);
         // store current data in state and manipulate component state to shallow remove
         const data = !isEmpty(hobbyInfo) ? hobbyInfo : hobbiesDetail;
         const {hobbies} = data;
-        hobbies.splice(hobbies.findIndex(item => item._id === id), 1);
+        hobbies.splice(hobbies.findIndex(item => item._id === selectedHobbyId), 1);
         setHobbyInfo({hobbies})
+    };
+
+    const onDelete = (id) => {
+        setDeleteHobbyDialog(true);
+        setSelectedHobbyId(id)
+    };
+
+    const renderHobbyDialogs = () => {
+        return <Fragment>
+            {/*<CustomDialog isOpen={addUserDialog} saveBtnText={'Save'}*/}
+            {/*              onClose={()=> setAddUserDialog(false)}*/}
+            {/*              title={'Add User'} onConfirm={onConfirm}*/}
+            {/*>*/}
+            {/*    <div className="row">*/}
+            {/*        <div className={'col-md-12 mt-4'}>*/}
+            {/*            <label htmlFor={'name'}>Name:</label>*/}
+            {/*            <input value={name} name='name' id='name' className="form-control form-control-sm"*/}
+            {/*                   placeholder='Enter name' type="text" onChange={({target:{value = ''}}) => setName(value)}/>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</CustomDialog>*/}
+            <CustomDialog isOpen={deleteHobbyDialog} saveBtnText={'Confirm'} onClose={() => setDeleteHobbyDialog(false)}
+                          title={'Confirm action'} onConfirm={onConfirmDelete}>
+                <div className="row">
+                    <div className={'col-md-12 mt-4'}>
+                        <label>Delete this hobby?</label>
+                    </div>
+                </div>
+            </CustomDialog>
+        </Fragment>
     };
 
     const renderHobbies = () => {
@@ -76,6 +110,7 @@ const Hobbies = () => {
                 </TableContainer> :
                 <p className='d-flex justify-content-center align-content-center'>No hobbies listed yet</p>}
         </div>
+        {renderHobbyDialogs()}
     </div>
 };
 
