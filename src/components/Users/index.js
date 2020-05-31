@@ -10,7 +10,8 @@ import CustomDialog from '../Common/CustomDialog';
 
 const Users = () => {
     const dispatch = useDispatch();
-    const [addUserModal, setAddUserModal] = React.useState(false);
+    const [addUserDialog, setAddUserDialog] = React.useState(false);
+    const [confirmationDialog, setConfirmationDialog] = React.useState(false);
     const [name, setName] = React.useState('');
 
     useEffect(() => {
@@ -25,14 +26,20 @@ const Users = () => {
     }
 
     const onAddUser = () => {
-        dispatch(addUser({_id: !isEmpty(users) ? `${(users.length + 1)}` : '1', name: name}))
         // handling id on frontend due to database non-availability
+        dispatch(addUser({_id: !isEmpty(users) ? `${(users.length + 1)}` : '1', name: name}));
+        setConfirmationDialog(false)
+    };
+
+    const onConfirm = () => {
+        setAddUserDialog(false);
+        setConfirmationDialog(true)
     };
 
     return <div className={"resize user-container"}>
         <div className='d-flex justify-content-between m-2'>
             <h2>Users</h2>
-            <Button variant="contained" color="primary" onClick={()=> setAddUserModal(true)}>Add User</Button>
+            <Button variant="contained" color="primary" onClick={()=> setAddUserDialog(true)}>Add User</Button>
         </div>
 
         {!isEmpty(users) && users.map(user => {
@@ -45,12 +52,22 @@ const Users = () => {
             </div>
         })}
 
-        <CustomDialog isOpen={addUserModal} onClose={()=> setAddUserModal(false)} title={'Add User'} onConfirm={onAddUser}>
+        <CustomDialog isOpen={addUserDialog} saveBtnText={'Save'}
+                      onClose={()=> setAddUserDialog(false)}
+                      title={'Add User'} onConfirm={onConfirm}
+        >
             <div className="row">
                 <div className={'col-md-12 mt-4'}>
                     <label htmlFor={'name'}>Name:</label>
                     <input value={name} name='name' id='name' className="form-control form-control-sm"
                            placeholder='Enter name' type="text" onChange={({target:{value = ''}}) => setName(value)}/>
+                </div>
+            </div>
+        </CustomDialog>
+        <CustomDialog isOpen={confirmationDialog} saveBtnText={'Confirm'} onClose={()=> setConfirmationDialog(false)} title={'Confirm action'} onConfirm={onAddUser}>
+            <div className="row">
+                <div className={'col-md-12 mt-4'}>
+                    <label>Add this user?</label>
                 </div>
             </div>
         </CustomDialog>

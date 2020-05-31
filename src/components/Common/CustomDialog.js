@@ -1,13 +1,7 @@
 import React from "react";
-import {
-    Modal,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent
-} from "@material-ui/core";
+import {Button, Dialog, DialogActions, DialogContent} from "@material-ui/core";
 
-const CustomDialog = ({isOpen, onClose, onConfirm, title, children}) => {
+const CustomDialog = ({isOpen = false, onClose, onConfirm, title = '', saveBtnText = 'Save', children}) => {
 
     return <Dialog disableEnforceFocus fullWidth open={isOpen} onClose={onClose}>
         <DialogContent>
@@ -17,7 +11,7 @@ const CustomDialog = ({isOpen, onClose, onConfirm, title, children}) => {
         <DialogActions>
             <Button onClick={onConfirm}
                     className="bg-primary text-white text-capitalize mr-4">
-                Save
+                {saveBtnText}
             </Button>
             <Button onClick={onClose} className="back_button text-capitalize mr-4">
                 Cancel
