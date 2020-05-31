@@ -37,12 +37,15 @@ export default (state, action) => {
         case addUser.TRIGGER:
             return {...state, loading: true, adding: true, error: false, successRes: false};
         case addUser.SUCCESS:
+            let updatedUsers = state.users;
+            updatedUsers.push(action.payload);
             return {
                 ...state,
                 adding: false,
                 successRes: true,
                 error: false,
                 loading: false,
+                users: updatedUsers
             };
         case addUser.FAILURE:
             return {
@@ -50,7 +53,7 @@ export default (state, action) => {
                 adding: false,
                 successRes: false,
                 loading: false,
-                error: true
+                error: true,
             };
         default:
             return {...state}

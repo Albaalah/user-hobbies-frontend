@@ -7,19 +7,19 @@ function* callServer(
     showError = true,
     id = null
 )  {
-        reqData = reqData || {}
+        reqData = reqData || {};
         const response = yield call(apiFunction, reqData, reqData.id || id);
         const {
             status = 200,
             data: resData = null,
             ok = false,
             problem = 'TIMEOUT_ERROR'
-        } = response || {}
+        } = response || {};
 
         if (ok && status && status >= 200 && status <= 300) {
             return { error: false, res: resData, statusCode: status }
         } else {
-            let message = ''
+            let message = '';
             if (resData) {
                 if (typeof resData.error === 'object' && resData.error.message) {
                     message = resData.error.message
@@ -37,10 +37,7 @@ function* callServer(
             } else {
                 message = getMessage(problem)
             }
-            if (showError) {
-                console.log(message)
-            }
-            const { data = {} } = resData
+            const { data = {} } = resData;
             throw { error: true, message, statusCode: status, data }
         }
     }
@@ -55,7 +52,7 @@ const getMessage = (error) => {
     } else {
         return 'Something went wrong. Please try again'
     }
-}
+};
 
 export default {
     callServer

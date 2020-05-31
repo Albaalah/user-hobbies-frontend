@@ -14,8 +14,7 @@ function* getUsersRequest(api, {payload}) {
 function* addUserRequest(api, {payload}) {
     try {
         const {res = {}} = yield call(Api.callServer, api, payload);
-        yield put(addUser.success(res));
-        // yield put(getUsers.trigger())
+        yield put(addUser.success(payload)); //so that reducer can update our users
     } catch (e) {
         yield put(addUser.failure(e))
     }
