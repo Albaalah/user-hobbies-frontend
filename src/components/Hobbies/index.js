@@ -77,13 +77,13 @@ const Hobbies = () => {
             >
                 <div className="row">
                     <div className={'col-md-12 mt-4'}>
-                        <label htmlFor={'name'}>Hobby Title:</label>
+                        <label htmlFor={'name'}>Enter Hobby:</label>
                         <input value={title} name='title' id='title' className="form-control form-control-sm"
                                placeholder='Enter hobby' type="text"
                                onChange={({target: {value = ''}}) => setTitle(value)}/>
                     </div>
                     <div className={'col-md-12 mt-4'}>
-                        <label htmlFor={'passion'}>Passion:</label>
+                        <label htmlFor={'passion'}>Select Passion:</label>
                         <Select
                             name={'passion'}
                             className="form-control form-control-sm"
@@ -97,7 +97,7 @@ const Hobbies = () => {
                     </div>
 
                     <div className={'col-md-12 mt-4'}>
-                        <label htmlFor={'year'}>Year:</label>
+                        <label htmlFor={'year'}>Enter Year:</label>
                         <input value={year} name='year' id='year' className="form-control form-control-sm"
                                placeholder='Enter year' type="number" min={1900} max={2100}
                                onChange={({target: {value = ''}}) => {
@@ -140,7 +140,7 @@ const Hobbies = () => {
                             {title}
                         </TableCell>
                         <TableCell align="right">{passion}</TableCell>
-                        <TableCell align="right">{year}</TableCell>
+                        <TableCell align="right">Since {year}</TableCell>
                         <TableCell align="right">
                             <Button variant="outlined" color="primary" onClick={() => onDelete(_id)}>Delete</Button>
                         </TableCell>
