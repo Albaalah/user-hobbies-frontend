@@ -3,6 +3,8 @@ import './index.scss';
 import {
     Button,
     CircularProgress,
+    MenuItem,
+    Select,
     Table,
     TableBody,
     TableCell,
@@ -10,20 +12,36 @@ import {
     TableHead,
     TableRow
 } from "@material-ui/core";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {isEmpty} from 'lodash';
 import CustomDialog from "../Common/CustomDialog";
+import {addHobby} from "../../reducers/hobbies.reducer";
 
 const Hobbies = () => {
+    const dispatch = useDispatch();
     const hobbiesDetail = useSelector(state => state.hobbies.hobbiesDetail);
     const loading = useSelector(state => state.users.loading);
     const [hobbyInfo, setHobbyInfo] = React.useState([]);
     const [deleteHobbyDialog, setDeleteHobbyDialog] = React.useState(false);
+    const [addHobbyDialog, setAddHobbyDialog] = React.useState(false);
+    const [confirmAddHobby, setConfirmAddHobby] = React.useState(false);
     const [selectedHobbyId, setSelectedHobbyId] = React.useState(false);
+
+    const [title, setTitle] = React.useState('');
+    const [passion, setPassion] = React.useState('Low');
+    const [year, setYear] = React.useState('');
 
     if (loading) {
         return <CircularProgress/>
     }
+
+    const onConformAddHobby = () => {
+        const data = !isEmpty(hobbyInfo) ? hobbyInfo : hobbiesDetail;
+        const {hobbies} = data;
+        dispatch(addHobby({_id: !isEmpty(hobbies) ? `${(hobbies.length + 1)}` : '1', title, passion, year}));
+        setConfirmAddHobby(false);
+        resetState()
+    };
 
     const onConfirmDelete = () => {
         setDeleteHobbyDialog(false);
@@ -39,25 +57,71 @@ const Hobbies = () => {
         setSelectedHobbyId(id)
     };
 
+    const resetState = () => {
+        setTitle('');
+        setPassion('Low');
+        setYear('');
+    };
+
     const renderHobbyDialogs = () => {
         return <Fragment>
-            {/*<CustomDialog isOpen={addUserDialog} saveBtnText={'Save'}*/}
-            {/*              onClose={()=> setAddUserDialog(false)}*/}
-            {/*              title={'Add User'} onConfirm={onConfirm}*/}
-            {/*>*/}
-            {/*    <div className="row">*/}
-            {/*        <div className={'col-md-12 mt-4'}>*/}
-            {/*            <label htmlFor={'name'}>Name:</label>*/}
-            {/*            <input value={name} name='name' id='name' className="form-control form-control-sm"*/}
-            {/*                   placeholder='Enter name' type="text" onChange={({target:{value = ''}}) => setName(value)}/>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*</CustomDialog>*/}
+            {addHobbyDialog && <CustomDialog isOpen={addHobbyDialog} saveBtnText={'Save'}
+                                             onClose={() => {
+                                                 setAddHobbyDialog(false);
+                                                 resetState();
+                                             }}
+                                             title={'Add Hobby'} onConfirm={() => {
+                setConfirmAddHobby(true);
+                setAddHobbyDialog(false)
+            }}
+            >
+                <div className="row">
+                    <div className={'col-md-12 mt-4'}>
+                        <label htmlFor={'name'}>Hobby Title:</label>
+                        <input value={title} name='title' id='title' className="form-control form-control-sm"
+                               placeholder='Enter hobby' type="text"
+                               onChange={({target: {value = ''}}) => setTitle(value)}/>
+                    </div>
+                    <div className={'col-md-12 mt-4'}>
+                        <label htmlFor={'passion'}>Passion:</label>
+                        <Select
+                            name={'passion'}
+                            className="form-control form-control-sm"
+                            value={passion}
+                            onChange={({target: {value = ''}}) => setPassion(value)}
+                        >
+                            <MenuItem value={'Low'}>Low</MenuItem>
+                            <MenuItem value={'Medium'}>Medium</MenuItem>
+                            <MenuItem value={'High'}>High</MenuItem>
+                        </Select>
+                    </div>
+
+                    <div className={'col-md-12 mt-4'}>
+                        <label htmlFor={'year'}>Year:</label>
+                        <input value={year} name='year' id='year' className="form-control form-control-sm"
+                               placeholder='Enter year' type="number" min={1900} max={2100}
+                               onChange={({target: {value = ''}}) => {
+                                   setYear(value)
+                               }}/>
+                    </div>
+                </div>
+            </CustomDialog>}
             <CustomDialog isOpen={deleteHobbyDialog} saveBtnText={'Confirm'} onClose={() => setDeleteHobbyDialog(false)}
                           title={'Confirm action'} onConfirm={onConfirmDelete}>
                 <div className="row">
                     <div className={'col-md-12 mt-4'}>
                         <label>Delete this hobby?</label>
+                    </div>
+                </div>
+            </CustomDialog>
+            <CustomDialog isOpen={confirmAddHobby} saveBtnText={'Confirm'} onClose={() => {
+                setConfirmAddHobby(false);
+                resetState();
+            }}
+                          title={'Confirm action'} onConfirm={onConformAddHobby}>
+                <div className="row">
+                    <div className={'col-md-12 mt-4'}>
+                        <label>Add new hobby?</label>
                     </div>
                 </div>
             </CustomDialog>
@@ -86,10 +150,13 @@ const Hobbies = () => {
         </Fragment>
     };
 
+
     return <div className={"resize hobbies-container"}>
         <div className='d-flex justify-content-between m-2'>
             <h2>Hobbies</h2>
-            <Button variant="contained" color="primary">Add Hobby</Button>
+            {/*Show Add button only when a user is selected*/}
+            {(!isEmpty(hobbiesDetail) || !isEmpty(hobbyInfo)) &&
+            <Button variant="contained" color="primary" onClick={() => setAddHobbyDialog(true)}>Add Hobby</Button>}
         </div>
         <div>
             {!isEmpty(hobbiesDetail) && !isEmpty(hobbiesDetail.hobbies) ? <TableContainer>

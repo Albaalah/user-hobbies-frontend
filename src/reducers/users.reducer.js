@@ -37,7 +37,7 @@ export default (state, action) => {
         case addUser.TRIGGER:
             return {...state, loading: true, adding: true, error: false, successRes: false};
         case addUser.SUCCESS:
-            let updatedUsers = state.users;
+            let updatedUsers = state.users || [];
             updatedUsers.push(action.payload);
             return {
                 ...state,

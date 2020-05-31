@@ -14,8 +14,7 @@ function* getHobbiesRequest(api, {payload}) {
 function* addHobbyRequest(api, {payload}) {
     try {
         const {res = {}} = yield call(Api.callServer, api, payload);
-        yield put(addHobby.success(res));
-        // yield put(getHobbies.trigger())
+        yield put(addHobby.success(payload)); //so that reducer can update our hobbies
     } catch (e) {
         yield put(addHobby.failure(e))
     }
@@ -25,7 +24,6 @@ function* deleteHobbyRequest(api, {payload}) {
     try {
         const {res = {}} = yield call(Api.callServer, api, payload, true);
         yield put(deleteHobby.success(res));
-        // yield put(getHobbies.trigger())
     } catch (e) {
         yield put(deleteHobby.failure(e))
     }

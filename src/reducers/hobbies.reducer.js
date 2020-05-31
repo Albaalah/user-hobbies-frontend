@@ -36,12 +36,15 @@ export default (state, action) => {
         case addHobby.TRIGGER:
             return {...state, loading: true, adding: true, error: false, successRes: false};
         case addHobby.SUCCESS:
+            let updatedHobbies = state.hobbiesDetail.hobbies || [];
+            updatedHobbies.push(action.payload);
             return {
                 ...state,
                 adding: false,
                 successRes: true,
                 error: false,
                 loading: false,
+                hobbiesDetail: {hobbies: updatedHobbies}
             };
         case addHobby.FAILURE:
             return {
