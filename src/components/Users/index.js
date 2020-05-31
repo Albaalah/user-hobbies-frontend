@@ -68,10 +68,10 @@ const Users = () => {
         </Fragment>
     }
 
-    return <div className={"resize user-container"}>
+    return <div className={"resize user-container"} data-testid="user-component">
         <div className='d-flex justify-content-between m-2'>
             <h2>Users</h2>
-            <Button variant="contained" color="primary" onClick={() => setAddUserDialog(true)}>Add User</Button>
+            <Button data-testid="add-user-btn" variant="contained" color="primary" onClick={() => setAddUserDialog(true)}>Add User</Button>
         </div>
 
         {!isEmpty(users) && users.map(user => {

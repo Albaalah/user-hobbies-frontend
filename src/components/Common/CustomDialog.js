@@ -5,11 +5,11 @@ const CustomDialog = ({isOpen = false, onClose, onConfirm, title = '', saveBtnTe
 
     return <Dialog disableEnforceFocus fullWidth open={isOpen} onClose={onClose}>
         <DialogContent>
-            <h2>{title}</h2>
+            <h2 data-testid="title-heading">{title}</h2>
             {children}
         </DialogContent>
         <DialogActions>
-            <Button onClick={onConfirm}
+            <Button onClick={onConfirm} data-testid={"save-btn"}
                     className="bg-primary text-white text-capitalize mr-4">
                 {saveBtnText}
             </Button>

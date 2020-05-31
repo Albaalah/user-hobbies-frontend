@@ -1,6 +1,6 @@
 import {call, put, takeLatest} from 'redux-saga/effects';
 import Api from '../services/ApiCaller';
-import {addHobby, deleteHobby, getHobbies} from "../reducers/hobbies.reducer";
+import {addHobby, getHobbies} from "../reducers/hobbies.reducer";
 
 function* getHobbiesRequest(api, {payload}) {
     try {
@@ -20,23 +20,12 @@ function* addHobbyRequest(api, {payload}) {
     }
 }
 
-function* deleteHobbyRequest(api, {payload}) {
-    try {
-        const {res = {}} = yield call(Api.callServer, api, payload, true);
-        yield put(deleteHobby.success(res));
-    } catch (e) {
-        yield put(deleteHobby.failure(e))
-    }
-}
-
 export default (api) => {
     const getHobbiesApi = (id) => api.get(`/hobbies/${id}`);
     const addHobbyApi = (data) => api.post('/hobbies', data);
-    const deleteHobbyApi = (id) => api.delete(`/hobbies/${id}`);
 
     return [
         takeLatest(getHobbies.TRIGGER, getHobbiesRequest, getHobbiesApi),
-        takeLatest(addHobby.TRIGGER, addHobbyRequest, addHobbyApi),
-        takeLatest(deleteHobby.TRIGGER, deleteHobbyRequest, deleteHobbyApi)
+        takeLatest(addHobby.TRIGGER, addHobbyRequest, addHobbyApi)
     ]
 }

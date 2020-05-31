@@ -2,7 +2,6 @@ import {createRoutine} from 'redux-saga-routines'
 
 export const getHobbies = createRoutine('GET_HOBBIES');
 export const addHobby = createRoutine('ADD_HOBBY');
-export const deleteHobby = createRoutine('DELETE_HOBBY');
 
 export default (state, action) => {
     switch (action.type) {
@@ -52,23 +51,6 @@ export default (state, action) => {
                 adding: false,
                 successRes: false,
                 loading: false,
-                error: true
-            };
-        //Delete a hobby
-        case deleteHobby.TRIGGER:
-            return {...state, loading: true, error: false, successRes: false};
-        case deleteHobby.SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                successRes: true,
-                error: false
-            };
-        case deleteHobby.FAILURE:
-            return {
-                ...state,
-                loading: false,
-                successRes: true,
                 error: true
             };
         default:
