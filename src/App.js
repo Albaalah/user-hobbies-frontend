@@ -1,12 +1,21 @@
-import React from 'react';
-import './App.css';
+import React, {Component} from 'react';
+import Layout from "./components/Layout"
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.css';
 
-function App() {
-  return (
-    <div className="App">
-     Coming Soon!
-    </div>
-  );
+class AppRoutes extends Component {
+
+    render() {
+        return <Router>
+            <div>
+                <Switch>
+                    <Route exact path="/" component={Layout}/>
+                    {/*<Route exact path="/users" component={Users}/>*/}
+                    {/*<Route exact path="/hobbies/:id" component={Hobbies}/>*/}
+                </Switch>
+            </div>
+        </Router>
+    }
 }
 
-export default App;
+export default AppRoutes

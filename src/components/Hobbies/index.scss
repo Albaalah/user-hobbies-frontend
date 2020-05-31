@@ -1,0 +1,9 @@
+.hobbies-container {
+  width: 70%;
+  max-height: 650px;
+  overflow-y: scroll;
+  direction: rtl;
+  div {
+    direction: ltr;
+  }
+}
